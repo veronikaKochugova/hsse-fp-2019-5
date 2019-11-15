@@ -11,7 +11,63 @@
 	father(b,e).  % 4
 	father(c,f).  % 5
 % указать в каком порядке и какие ответы генерируются вашими методами
-	?- brother(X,Y).
-	?- cousin(X,Y).
-	?- grandson(X,Y).
-	?- descendent(X,Y).
+	% ?- brother(X,Y).
+	% ?- cousin(X,Y).
+	% ?- grandson(X,Y).
+	% ?- descendent(X,Y).
+
+% --------------------------------------------------------
+% my functions:
+%
+
+brother(X,Y) :- father(Z,Y), father(Z,X), X \= Y.
+cousin(X,Y) :- father(K,X), father(L,Y), brother(K,L).
+grandson(X,Y) :- father(Y,Z), father(Z,X).
+descendent(X,Y) :-
+	father(Y,X); 
+	grandson(X,Y).
+
+% --------------------------------------------------------
+% my commnads to check:
+%
+
+?- format('brothers~n').
+?- forall(brother(X,Y), format('~w - ~w~n', [X,Y])).
+
+?- format('cousins~n').
+?- forall(cousin(X,Y), format('~w - ~w~n', [X,Y])).
+
+?- format('grandsons~n').
+?- forall(grandson(X,Y), format('~w - ~w~n', [X,Y])).
+
+?- format('descendents~n').
+?- forall(descendent(X,Y), format('~w - ~w~n', [X,Y])).
+
+% --------------------------------------------------------
+% My output:
+%
+
+% brothers
+% c - b
+% b - c
+% e - d
+% d - e
+% cousins
+% d - f
+% e - f
+% f - d
+% f - e
+% grandsons
+% d - a
+% e - a
+% f - a
+% descendents
+% b - a
+% c - a
+% d - b
+% e - b
+% f - c
+% d - a
+% e - a
+% f - a
+% true.
